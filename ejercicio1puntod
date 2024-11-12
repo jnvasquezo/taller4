@@ -1,0 +1,42 @@
+const int pinDirector = 34;      // 45%
+const int pinVicedirector = 35;  // 35%
+const int pinSecretario = 36;    // 20%
+const int pinAprobacion = 22;    
+
+void setup() {
+  pinMode(pinDirector, INPUT);
+  pinMode(pinVicedirector, INPUT);
+  pinMode(pinSecretario, INPUT);
+  pinMode(pinAprobacion, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  bool a = digitalRead(pinDirector);      // 45%
+  bool b = digitalRead(pinVicedirector);  // 35%
+  bool c = digitalRead(pinSecretario);    // 20%
+  
+  bool aprobado = (a && b) || (a && c) || (b && c && a);
+  
+  digitalWrite(pinAprobacion, aprobado);
+
+  Serial.println("----------------------------------------");
+  Serial.println("Votación de directivos:");
+  Serial.print("Director (45%): "); 
+  Serial.println(a ? "APRUEBA" : "NO APRUEBA");
+  Serial.print("Vicedirector (35%): "); 
+  Serial.println(b ? "APRUEBA" : "NO APRUEBA");
+  Serial.print("Secretario (20%): "); 
+  Serial.println(c ? "APRUEBA" : "NO APRUEBA");
+  Serial.println("----------------------------------------");
+  
+  int porcentajeTotal = (a ? 45 : 0) + (b ? 35 : 0) + (c ? 20 : 0);
+  Serial.print("Porcentaje total a favor: ");
+  Serial.print(porcentajeTotal);
+  Serial.println("%");
+  Serial.print("Decisión: ");
+  Serial.println(aprobado ? "APROBADA (>50%)" : "RECHAZADA (<50%)");
+  Serial.println("----------------------------------------\n");
+  
+  delay(5000);
+}
